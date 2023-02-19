@@ -1,0 +1,159 @@
+<html>
+<head>
+<title>Morse Code</title>
+<script>
+
+function encdec(){
+	let str_input = document.getElementById("input").value;
+	let operation = document.getElementById("operation").value;
+	
+	const mcode = {
+      'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+      'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+      'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+      'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+      'Y': '-.--', 'Z': '--..', ' ': ' ', '0': '-----',
+      '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+      '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+      '&': '.-...', "'": '.----.', '@': '.--.-.', ')': '-.--.-', '(': '-.--.',
+      ':': '---...', ',': '--..--', '=': '-...-', '!': '-.-.--', '.': '.-.-.-',
+      '-': '-....-', '+': '.-.-.', '"': '.-..-.', '?': '..--..', '/': '-..-.'
+    }
+	/*
+	write your JavaScript codes below
+	*/
+
+
+	let str_input_uppercase = str_input.toUpperCase(); //Converts the input to uppercase so the characters match the key:pair values
+
+	var morseCode; //Sets up a variable to hold the resultant morsecode
+
+	if(operation == 'enc'){
+		//Executes if the user picked the enc option which will allow them to encode a string
+
+		for(var count = 0; count<str_input.length; count++){
+			//Loops for the length of the input
+
+			if(!(str_input_uppercase.charAt(count) in mcode)){
+				//Checks if the input has characters not within mcode
+
+				alert("Invalid input"); //Alerts the user that the input is invalid as a character is not in mcode
+				return(-1); //Stops execution
+				/*mcode[str_input_uppercase.charAt(count)] == "undefined"*/
+
+			}
+
+		}
+
+		for(var i = 0; i<str_input.length; i++){
+			//Loops for the length of the input
+	
+			if(i == 0){
+				//Executes if the count is equal to 0
+
+				if(str_input_uppercase.charAt(i) == " "){
+					//Executes if the character in the input at count is a space (This has to be checked as a space is a valid character however, it is not included in mcode)
+					morseCode = "  "; //Includes a space in the morscode
+
+				}
+				else{
+
+					morseCode = mcode[str_input_uppercase.charAt(i)]; //Adds the morse code character equal to the character at the count in the input to the string
+
+				}
+			}
+			else{	
+
+				if(str_input_uppercase.charAt(i) == " "){
+					//Checks to see if the character is a space (This has to be checked as a space is a valid character however, it is not included in mcode)
+					morseCode = morseCode + "  "; //Adds a space to the morse code
+				}
+				else{
+				
+					morseCode = morseCode + " " + mcode[str_input_uppercase.charAt(i)]; //Adds the corresponding morse code of the character at the count to the string 
+				}
+			}
+	
+		}
+		
+		answer = morseCode;
+	}
+
+		
+	else{
+
+		const morseCode_array = str_input.split(" "); //Splits the morsecode by the space in between the morse code values
+		var converted_string; //Sets up a string to hold the converted string
+	
+		for(var i = 0; i<str_input.length; i++){
+			//Loops for the length of the input
+			if(i == 0){
+				//Executes if the count is equal to 0
+				for(var key in mcode){
+					//Loops for the number of keys in the key:pair values
+					if(mcode[key] == morseCode_array[i]){
+						//Executes if the morse code is equal to the pair of the key:pair value 
+						converted_string = key; //Adds the key of the key:pair value to the converted string
+					}
+					else if(morseCode_array[i] == ""){
+						//Checks if the split character is blank - this meaning when split there was an intended space
+						converted_string = " "; //Adds a space to the converted string
+						break;
+
+					}
+				}
+			}
+			else{
+				for(var key in mcode){
+					//Loops for the keys in the key:pair values
+					if(mcode[key] == morseCode_array[i]){
+						//Executes if the morse code is equal to the pair of the key:pair value
+						converted_string = converted_string + key; //Adds the key of the key:pair value to the converted string
+					}
+					else if(morseCode_array[i] == ""){
+						//Checks if the split character is blank - this meaning when split there was an intended space
+						converted_string = converted_string + " "; //Adds a space to the converted string
+						break;
+
+					}
+				}
+
+			}
+	
+		}
+		answer = converted_string;
+
+	}
+	
+	document.getElementById("output").innerHTML = answer; //Populates the output text box with the converted text
+}
+
+</script>
+</head>
+<body>
+<H1>Morse code encoder/decoder</H1>
+<h3>@author: Kian Barry </h3>
+<div>
+<form>
+<p> Enter a string</p>
+<p> <textarea id="input" rows='5' cols='50'></textarea> </p>
+<p>
+<div id="optionloc" style="position:absolute; top:190px; left:240px;">
+<select id="operation">
+<option value="enc">Encode</option>
+<option value="dec">Decode</option>
+</select>
+</div>
+<div id="buttonloc" style="position:absolute; top:190px; left:320px;">
+<button type="button" id="submit" onclick=encdec()>Submit</button>
+</div>
+</p>
+
+<div>
+<p>Encoded/decoded Morse code: </p>
+<textarea id="output" rows='5' cols='50' readonly></textarea>
+</div>
+</form>
+</div>
+</body>
+</html>
