@@ -1,8 +1,8 @@
 # README
 
-## What is this file
+## What is this repository
 
-This file contains some examples of the work completed so far during the Univeristy of Leeds Computer Science course
+This repository contains some examples of the work completed so far during the Univeristy of Leeds Computer Science course
 
 ## Languages:
 
