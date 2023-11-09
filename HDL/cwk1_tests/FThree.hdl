@@ -1,0 +1,42 @@
+CHIP FThree{
+
+	IN A,B,C,D;
+	OUT E,F,G;
+
+	PARTS:
+		
+		And(a=A, b=C, out=AandC);
+		And(a=B,b=D, out=BandD);
+		And(a=BandD,b=A, out=AandBandD);
+		And(a=BandD,b=C, out=BandDandC);
+		Or(a=AandC,b=AandBandD, out=orGate1);
+		Or(a=orGate1,b=BandDandC, out=E);
+		
+		Not(in=A, out=NotA);
+		Not(in=B, out=NotB);
+		Not(in=C, out=NotC);
+		Not(in=D, out=NotD);
+
+		And(a=AandC,b=BandD, out=AandBandCandD);//
+		And(a=A,b=B, out=AandB);
+		And(a=NotC,b=NotD, out=NotCandNotD);
+		And(a=A,b=NotB, out=AandNotB);
+		And(a=AandNotB,b=NotC, out=AandNotBandNotC);//
+		And(a=NotA,b=NotB, out=NotAandNotB);
+		And(a=NotAandNotB,b=C, out=NotAandNotBandC);//
+		And(a=A,b=NotCandNotD, out=AandNotCandNotD);//
+		And(a=NotA,b=B, out=NotAandB);
+		And(a=NotC,b=D, out=NotCandD);
+		And(a=NotAandB,b=NotCandD, out=NotAandBandNotCandD);//
+		And(a=NotA,b=C, out=NotAandC);
+		And(a=NotAandC,b=NotD, out=NotAandCandNotD);//
+		Or(a=AandBandCandD,b=AandNotBandNotC, out=orGroup1);
+		Or(a=NotAandNotBandC,b=AandNotCandNotD, out=orGroup2);
+		Or(a=NotAandBandNotCandD,b=NotAandCandNotD, out=orGroup3);
+		Or(a=orGroup1,b=orGroup2, out=combinedOr);
+		Or(a=combinedOr,b=orGroup3, out=F);
+
+		And(a=B,b=NotD, out=BandNotD);
+		And(a=NotB,b=D, out=NotBandD);
+		Or(a=BandNotD,b=NotBandD, out=G);
+}

@@ -1,0 +1,18 @@
+CHIP FSEQ{
+	
+	IN A,B,C,D,f0,f1,load;
+	OUT E,F,G;
+	
+	PARTS:
+
+		FALL(A=A,B=B,C=C,D=D,f0=f0,f1=f1,F=Ft,G=Gt);
+		
+		DFF(in=Ft,out=outC1,out=Ft1);
+		Mux(a=Ft1,b=C,sel=load,out=muxC);
+
+		DFF(in=Gt,out=outD1,out=Gt1);
+		Mux(a=Gt1,b=D,sel=load,out=muxD);
+		
+		FALL(A=A,B=B,C=muxC,D=muxD,f0=f0,f1=f1,E=E,F=F,G=G);
+
+}

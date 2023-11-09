@@ -1,0 +1,92 @@
+CHIP FALL{
+	
+	IN A,B,C,D,f0,f1;
+	OUT E,F,G;
+
+	PARTS:
+
+	//FZero*************************************************
+
+		Not(in=C, out=FZeroF);
+                Not(in=D, out=FZeroG);
+
+	//FOne*************************************************
+
+		And(a=A,b=C,out=FOneF);
+                And(a=B,b=D,out=FOneG);
+
+	//FTwo*************************************************
+
+		Or(a=A,b=C,out=FTwoF);
+       	 	Or(a=D,b=B,out=FTwoG);
+
+	//FThree***********************************************
+		
+		And(a=A, b=C, out=AandC);
+                And(a=B,b=D, out=BandD);
+                And(a=BandD,b=A, out=AandBandD);
+                And(a=BandD,b=C, out=BandDandC);
+                Or(a=AandC,b=AandBandD, out=orGate1);
+                Or(a=orGate1,b=BandDandC, out=FThreeE);
+
+                Not(in=A, out=NotA);
+                Not(in=B, out=NotB);
+                Not(in=C, out=NotC);
+                Not(in=D, out=NotD);
+
+                And(a=AandC,b=BandD, out=AandBandCandD);//
+                And(a=A,b=B, out=AandB);
+                And(a=NotC,b=NotD, out=NotCandNotD);
+                And(a=A,b=NotB, out=AandNotB);
+                And(a=AandNotB,b=NotC, out=AandNotBandNotC);//
+                And(a=NotA,b=NotB, out=NotAandNotB);
+                And(a=NotAandNotB,b=C, out=NotAandNotBandC);//
+                And(a=A,b=NotCandNotD, out=AandNotCandNotD);//
+                And(a=NotA,b=B, out=NotAandB);
+                And(a=NotC,b=D, out=NotCandD);
+                And(a=NotAandB,b=NotCandD, out=NotAandBandNotCandD);//
+                And(a=NotA,b=C, out=NotAandC);
+                And(a=NotAandC,b=NotD, out=NotAandCandNotD);//
+                Or(a=AandBandCandD,b=AandNotBandNotC, out=orGroup1);
+                Or(a=NotAandNotBandC,b=AandNotCandNotD, out=orGroup2);
+                Or(a=NotAandBandNotCandD,b=NotAandCandNotD, out=orGroup3);
+                Or(a=orGroup1,b=orGroup2, out=combinedOr);
+                Or(a=combinedOr,b=orGroup3, out=FThreeF);
+
+                And(a=B,b=NotD, out=BandNotD);
+                And(a=NotB,b=D, out=NotBandD);
+                Or(a=BandNotD,b=NotBandD, out=FThreeG);
+
+	//Multiplexor*************************************************
+	
+		Not(in=f0, out=Notf0);
+		Not(in=f1, out=Notf1);
+
+		And(a=f0,b=f1, out=f0andf1);
+		And(a=Notf0,b=Notf1, out=Notf0andNotf1);
+
+		And(a=f0,b=Notf1, out=f0andNotf1);
+		And(a=Notf0,b=f1, out=Notf0andf1);
+
+		And(a=FZeroF,b=Notf0andNotf1, out=FZeroFSelected);
+		And(a=FZeroG,b=Notf0andNotf1, out=FZeroGSelected);
+
+		And(a=FOneF,b=f0andNotf1, out=FOneFSelected);
+		And(a=FOneG,b=f0andNotf1, out=FOneGSelected);
+		
+		And(a=FTwoF,b=Notf0andf1, out=FTwoFSelected);
+		And(a=FTwoG,b=Notf0andf1, out=FTwoGSelected);
+
+		And(a=FThreeF,b=f0andf1, out=FThreeFSelected);
+		And(a=FThreeG,b=f0andf1, out=FThreeGSelected);
+		And(a=FThreeE,b=f0andf1, out=E);
+
+		Or(a=FZeroFSelected,b=FOneFSelected, out=FGroup1);
+		Or(a=FTwoFSelected,b=FThreeFSelected, out=FGroup2);
+		Or(a=FGroup1,b=FGroup2, out=F);
+
+		Or(a=FZeroGSelected,b=FOneGSelected, out=GGroup1);
+		Or(a=FTwoGSelected,b=FThreeGSelected, out=GGroup2);
+		Or(a=GGroup1,b=GGroup2, out=G);
+		
+}
