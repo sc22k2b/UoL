@@ -1,0 +1,73 @@
+@1	//Load value 1
+D=A	//Put value 1 in the data register
+@andVariable	//This variable will be used to extract bits
+M=D	//Place the value 1 in the andVariable memory location
+
+@16	//The value 16 is the number of times we want to loop (16 bit long number)
+D=A	//Place the value 15 in the data register
+@count	//Initialise a count location
+M=D	//Place the value 15 in the count location
+
+@0	//Get the value 0
+D=A	//Put 0 in the data register
+@sum	//Set up a new sum memory location
+M=D	//Put the value 0 into the sum memory location
+
+(loop)	//Will jump to here whilst looping
+@andVariable	//Retrieves back the andVariable
+D=M
+@3	//Loads the value at RAM[3] to be and(ed) with the andVarible to extract each bit
+D=D&M
+@andResult3	//Stores the result of the operation
+M=D
+
+@andVariable
+D=M
+@4	//Loads the value at RAM[4] to be and(ed) with the andVarible to extract each bit
+D=D&M
+@andResult4	//Stores the result of the operation
+M=D
+
+//+++Checks to see if they are the same+++
+
+@andResult3
+D=M
+@andResult4
+D=D-M
+
+//+++
+
+
+
+@skip
+D;JEQ	//Jumps past the increasing the sum function
+//if the subtraction is 0 as this means they both had a 
+//0 or 1 in the same postition and therefore nothing is added to the sum
+
+@andVariable //Adds the respective position to the sum
+D=M
+@sum
+M=M+D
+
+(skip)
+@andVariable //Doubles the and variable (the next bit position)
+D=M
+M=M+D
+@count
+M=M-1
+D=M
+@loop //Continues the loop as long as the count is above 0
+D;JGT
+
+@sum //Places the final value into RAM[5]
+D=M
+@5
+M=D
+
+(end) //Ends the function
+@end
+0;JMP
+
+
+
+

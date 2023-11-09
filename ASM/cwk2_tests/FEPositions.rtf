@@ -1,0 +1,190 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2639
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 @4	//4 rounds of encryption\
+D=A\
+@count\
+M=D\
+@255\
+D=A\
+@leftMask\
+M=D\
+@8\
+D=A\
+@shiftCount\
+M=D\
+@2\
+D=M\
+@plaintextRotated\
+M=D\
+@16384\
+D=A\
+D=D+A\
+@bigBit\
+M=D\
+@32767\
+D=A\
+@removeMSB\
+M=D\
+@bigBit\
+D=M\
+@plaintextRotated\
+D=D&M\
+@msb	//Store the msb (0 or 32768)\
+M=D\
+@msb\
+D=M\
+@skipRotate	//Skip rotate as the last shift did not contain the msb\
+D;JEQ\
+@1	//Store a 1 to be added on after the next shift\
+D=A\
+@additional\
+M=D\
+@removeMSB	//Remove the msb from the number to stop it overflowing\
+D=M\
+@plaintextRotated\
+M=D&M\
+@plaintextRotated\
+D=M\
+M=D+M\
+@additional\
+D=M\
+M=0\
+@plaintextRotated\
+M=D+M\
+@shiftCount\
+M=M-1\
+D=M\
+@shift\
+D;JGT\
+@leftMask\
+D=M\
+@plaintextRotated\
+D=D&M	//Mask off the last 8 bits\
+@leftBits\
+M=D\
+@2\
+D=M\
+@leftMask\
+D=D&M	//Mask off the last 8 bits in the original plaintext\
+@rightBits\
+M=D\
+@1	//Negate the key for the function: A XOR \'acB\
+D=M\
+@negatedKey\
+M=!D\
+@leftMask	//Retain 8 bit key length by masking off any additional bits\
+D=M\
+@negatedKey\
+M=D&M\
+@rightBits\
+D=M\
+@negatedKey\
+D=D&M\
+@nandResult\
+M=!D\
+@leftMask	//Retain an 8 bit length (mask off bits 9-16)\
+D=M\
+@nandResult\
+M=D&M\
+@rightBits\
+D=M\
+@negatedKey\
+D=D|M\
+@orResult\
+M=D\
+@nandResult\
+D=M\
+@orResult\
+D=D&M\
+@functionResult\
+M=D\
+@leftBits\
+D=M\
+@functionResult\
+D=D&M\
+@nandResult\
+M=!D\
+@leftMask	//Retain an 8 bit length (mask off bits 9-16)\
+D=M\
+@nandResult\
+M=D&M\
+@leftBits\
+D=M\
+@functionResult\
+D=D|M\
+@orResult\
+M=D\
+@nandResult\
+D=M\
+@orResult\
+D=D&M\
+@functionXOR\
+M=D\
+@128	//Set up the msb for an 8 bit value\
+D=A\
+@eighthBit\
+M=D\
+@1	//The key\
+D=M\
+@eightBit\
+D=D&M\
+@skipRotate	//Dont add an additional 1 to the shift as the key did not contain the msb\
+D;JEQ\
+@1\
+D=A\
+@rotatedBit\
+M=D\
+@1\
+D=M\
+M=D+M\
+@rotatedBit	//Add the additional bit that rotated round\
+D=M\
+M=0\
+@1\
+M=D+M\
+@rightBits\
+D=M\
+@nextLeftBits\
+M=D\
+@leftBits\
+D=M\
+@nextRightBits\
+M=D\
+@nextLeftBits	//Switch right bits to left bits\
+D=M\
+@leftBits\
+M=D\
+@nextRightBits		//Switch left bits to right bits\
+D=M\
+@rightBits\
+M=D\
+@count	//Continues the loop whilst the count (4) is above 0\
+M=M-1\
+D=M\
+@loop\
+D;JGT\
+@8\
+D=A\
+@reverseCount\
+M=D\
+@leftBits	//Shift the bits left 1 place\
+D=M\
+M=D+M\
+@reverseCount\
+M=M-1\
+D=M\
+@shiftEight\
+D;JGT\
+@leftBits\
+D=M\
+@rightBits\
+D=D+M\
+@0\
+M=D\
+@end\
+0;JMP}
